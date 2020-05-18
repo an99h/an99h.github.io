@@ -17,21 +17,21 @@
   <meta http-equiv="window-target" content="_top">
   
   
-  <title>在树莓派上安装gogs git服务器 | Hexo</title>
-  <meta name="description" content="在树莓派上安装gogs git服务器">
-<meta name="keywords" content="git,Raspberry Pi,Gogs">
+  <title>linux 字符驱动中私有数据用法 | Hexo</title>
+  <meta name="description" content="一、前提为了代码更加整洁， 尽量少用全局变量，linux引入私有数据概念， 通过学习别人代码和自己理解，写字符驱动首先创建一个描述当前字符驱动的结构体，只是描述字符驱动不与业务耦合，再创建一个与业务相关的驱动上下文结构体。把驱动上下文结构体当做私有数据保存到驱动框架里。 12345678910111213141516struct _chr_env&amp;#123;	int major;">
+<meta name="keywords" content="Linux驱动,char driver">
 <meta property="og:type" content="article">
-<meta property="og:title" content="在树莓派上安装gogs git服务器">
-<meta property="og:url" content="http://www.19940717.xyz/2019/01/09/在树莓派上安装gogs-git服务器/index.html">
+<meta property="og:title" content="linux 字符驱动中私有数据用法">
+<meta property="og:url" content="http://www.19940717.xyz/2020/05/18/linux-字符驱动中私有数据用法/index.html">
 <meta property="og:site_name" content="an99h&#39;s space">
-<meta property="og:description" content="在树莓派上安装gogs git服务器">
+<meta property="og:description" content="一、前提为了代码更加整洁， 尽量少用全局变量，linux引入私有数据概念， 通过学习别人代码和自己理解，写字符驱动首先创建一个描述当前字符驱动的结构体，只是描述字符驱动不与业务耦合，再创建一个与业务相关的驱动上下文结构体。把驱动上下文结构体当做私有数据保存到驱动框架里。 12345678910111213141516struct _chr_env&amp;#123;	int major;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-17T13:50:15.766Z">
+<meta property="og:updated_time" content="2020-05-18T15:25:34.496Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="在树莓派上安装gogs git服务器">
-<meta name="twitter:description" content="在树莓派上安装gogs git服务器">
+<meta name="twitter:title" content="linux 字符驱动中私有数据用法">
+<meta name="twitter:description" content="一、前提为了代码更加整洁， 尽量少用全局变量，linux引入私有数据概念， 通过学习别人代码和自己理解，写字符驱动首先创建一个描述当前字符驱动的结构体，只是描述字符驱动不与业务耦合，再创建一个与业务相关的驱动上下文结构体。把驱动上下文结构体当做私有数据保存到驱动框架里。 12345678910111213141516struct _chr_env&amp;#123;	int major;">
   <!-- Canonical links -->
-  <link rel="canonical" href="http://www.19940717.xyz/2019/01/09/在树莓派上安装gogs-git服务器/index.html">
+  <link rel="canonical" href="http://www.19940717.xyz/2020/05/18/linux-字符驱动中私有数据用法/index.html">
   
   
     <link rel="icon" href="/favicon.png" type="image/x-icon">
@@ -284,14 +284,14 @@
   
 <main class="main" role="main">
   <div class="content">
-  <article id="post-在树莓派上安装gogs-git服务器" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+  <article id="post-linux-字符驱动中私有数据用法" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
     
     <div class="article-header">
       
         
   
     <h1 class="article-title" itemprop="name">
-      在树莓派上安装gogs git服务器
+      linux 字符驱动中私有数据用法
     </h1>
   
 
@@ -299,78 +299,54 @@
       <div class="article-meta">
         <span class="article-date">
     <i class="icon icon-calendar-check"></i>
-	<a href="/2019/01/09/在树莓派上安装gogs-git服务器/" class="article-date">
-	  <time datetime="2019-01-09T15:53:12.000Z" itemprop="datePublished">2019-01-09</time>
+	<a href="/2020/05/18/linux-字符驱动中私有数据用法/" class="article-date">
+	  <time datetime="2020-05-18T15:22:49.000Z" itemprop="datePublished">2020-05-18</time>
 	</a>
 </span>
         
         
   <span class="article-tag">
     <i class="icon icon-tags"></i>
-	<a class="article-tag-link" href="/tags/Gogs/">Gogs</a>, <a class="article-tag-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a>, <a class="article-tag-link" href="/tags/git/">git</a>
+	<a class="article-tag-link" href="/tags/Linux驱动/">Linux驱动</a>, <a class="article-tag-link" href="/tags/char-driver/">char driver</a>
   </span>
 
 
         
 
-        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2019/01/09/在树莓派上安装gogs-git服务器/#comments" class="article-comment-link">Comments</a></span>
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/05/18/linux-字符驱动中私有数据用法/#comments" class="article-comment-link">Comments</a></span>
         
       </div>
     </div>
     <div class="article-entry marked-body" itemprop="articleBody">
       
-        <h2 id="在树莓派上安装gogs-git服务器"><a href="#在树莓派上安装gogs-git服务器" class="headerlink" title="在树莓派上安装gogs git服务器"></a>在树莓派上安装gogs git服务器</h2><a id="more"></a>
-<ul>
-<li><p>创建git用户： </p>
-<p><code>adduser git</code></p>
-</li>
-<li><p>下载gogs：</p>
-<p><code>wget https://dl.gogs.io/0.11.79/gogs_0.11.79_raspi2_armv6.zip</code></p>
-</li>
-<li><p>解压到git用户目录：</p>
-<p><code>unzip  gogs_0.11.79_raspi2_armv6.zip</code></p>
-</li>
-<li><p>修改Gogs  service配置文件：</p>
-<p><code>nano /home/git/gogs/scripts/init/debian/gogs</code></p>
-<p>“可能自己目录不一样”</p>
-</li>
-<li><p>切会<code>root</code>账户然后复制到<code>/etc/init.d/</code>  </p>
-<p><code>cp /home/git/gogs/scripts/init/debian/gogs /etc/init.d/</code></p>
-</li>
-<li><p>增加执行权限</p>
-<p><code>sudo chmod +x /etc/init.d/gogs</code></p>
-</li>
-<li><p>修改server</p>
-<p><code>nano /home/git/gogs/scripts/systemd/gogs.service</code></p>
-<p>可能需要修改路径等</p>
-</li>
-<li><p>复制server</p>
-<p><code>cp /home/git/gogs/scripts/systemd/gogs.service /etc/systemd/system/</code></p>
-</li>
-<li><p>启动Gogs</p>
-<p><code>service gogs start</code></p>
-<p>或 <code>systemctl enable gogs</code><br><code>systemctl start gogs</code></p>
-</li>
-<li><p>停止server</p>
-<p><code>service gogs stop</code></p>
-<p>或<code>systemctl stop gogs</code></p>
-</li>
-<li><p>重启sever</p>
-<p><code>service gogs restart</code></p>
-<p>或<code>systemctl restart gogs</code></p>
-</li>
-<li><p>查看启动状态</p>
-<p><code>systemctl status gogs</code>或<code>service gogs status</code></p>
-</li>
-<li><p>在自己浏览器上配置Gogs, <code>localhost</code>替换成自己的ip地址</p>
-<p><code>http://localhost:3000/install</code></p>
-</li>
-<li><p>有关Gogs的配置文件在<code>/home/git/gogs/custom/conf/app.ini</code>里面</p>
-</li>
-</ul>
-<p>出现以下错误<br>重启gogs未自动启动</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">root@raspberrypi:/home/git/gogs# sudo systemctl enable gogs</span><br><span class="line">Synchronizing state for gogs.service with sysvinit using update-rc.d...</span><br><span class="line">Executing /usr/sbin/update-rc.d gogs defaults</span><br><span class="line">perl: warning: Setting locale failed.</span><br><span class="line">perl: warning: Please check that your locale settings:</span><br><span class="line">	LANGUAGE = (unset),</span><br><span class="line">	LC_ALL = (unset),</span><br><span class="line">	LC_CTYPE = &quot;UTF-8&quot;,</span><br><span class="line">	LANG = &quot;en_GB.UTF-8&quot;</span><br><span class="line">    are supported and installed on your system.</span><br><span class="line">perl: warning: Falling back to a fallback locale (&quot;en_GB.UTF-8&quot;).</span><br><span class="line">Executing /usr/sbin/update-rc.d gogs enable</span><br><span class="line">perl: warning: Setting locale failed.</span><br><span class="line">perl: warning: Please check that your locale settings:</span><br><span class="line">	LANGUAGE = (unset),</span><br><span class="line">	LC_ALL = (unset),</span><br><span class="line">	LC_CTYPE = &quot;UTF-8&quot;,</span><br><span class="line">	LANG = &quot;en_GB.UTF-8&quot;</span><br><span class="line">    are supported and installed on your system.</span><br><span class="line">perl: warning: Falling back to a fallback locale (&quot;en_GB.UTF-8&quot;).</span><br></pre></td></tr></table></figure>
-<p>执行 export LC_ALL=en_GB.UTF-8</p>
+        <h3 id="一、前提"><a href="#一、前提" class="headerlink" title="一、前提"></a>一、前提</h3><p>为了代码更加整洁， 尽量少用全局变量，linux引入私有数据概念， 通过学习别人代码和自己理解，写字符驱动首先创建一个描述当前字符驱动的结构体，只是描述字符驱动不与业务耦合，再创建一个与业务相关的驱动上下文结构体。把驱动上下文结构体当做私有数据保存到驱动框架里。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> _<span class="title">chr_env</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="keyword">int</span> major;           <span class="comment">/* 该字符驱动主设备号，申请得到 */</span></span><br><span class="line">	<span class="keyword">int</span> number;          <span class="comment">/* 有多少个次设备 */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">class</span> *<span class="title">class</span>;</span> <span class="comment">/* 该字符驱动的class */</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 驱动上下文结构体</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">dev_ctx</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">cdev</span> <span class="title">cdev</span>;</span>    <span class="comment">/* 该字符驱动设备描述，这个很重要，open函数会通过cdev找到该结构体首地址*/</span></span><br><span class="line">	<span class="keyword">dev_t</span> devid;         <span class="comment">// 以下变量根据自己业务添加</span></span><br><span class="line">......</span><br><span class="line">&#125; dev_ctx;</span><br><span class="line"></span><br><span class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> _<span class="title">chr_env</span> <span class="title">chr_env</span>;</span> <span class="comment">/* 全局就这一个全局变量，这个省不了，init exit函数里要用到 */</span></span><br></pre></td></tr></table></figure>
+<h3 id="二、在probe函数里申请资源-然后保存到platform-device"><a href="#二、在probe函数里申请资源-然后保存到platform-device" class="headerlink" title="二、在probe函数里申请资源, 然后保存到platform_device"></a>二、在probe函数里申请资源, 然后保存到platform_device</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">key_dev_probe</span><span class="params">(struct platform_device *dev)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">device_node</span> *<span class="title">node</span> = <span class="title">dev</span>-&gt;<span class="title">dev</span>.<span class="title">of_node</span>;</span></span><br><span class="line">	<span class="keyword">int</span> count = of_gpio_count(node);   </span><br><span class="line">    dev_ctx *key_ctx = kmalloc(<span class="keyword">sizeof</span>(dev_ctx) * count, GFP_KERNEL);</span><br><span class="line">	platform_set_drvdata(dev, key_ctx);</span><br><span class="line">    .....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三、remove函数里拿到设备上下文结构体"><a href="#三、remove函数里拿到设备上下文结构体" class="headerlink" title="三、remove函数里拿到设备上下文结构体"></a>三、remove函数里拿到设备上下文结构体</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">key_dev_remove</span><span class="params">(struct platform_device *dev)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	dev_ctx *key_ctx = (dev_ctx *)platform_get_drvdata(dev);</span><br><span class="line">    ......</span><br><span class="line">    kfree(key_ctx);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="四、Linux-字符驱动open函数中使用私有数据"><a href="#四、Linux-字符驱动open函数中使用私有数据" class="headerlink" title="四、Linux 字符驱动open函数中使用私有数据"></a>四、Linux 字符驱动open函数中使用私有数据</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">key_open</span> <span class="params">(struct inode *node, struct file *file)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	dev_ctx *key_ctx = container_of(node-&gt;i_cdev, key_irq_dev, cdev);</span><br><span class="line">	</span><br><span class="line">	file-&gt;private_data = key_ctx;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Linux 驱动中<code>container_of()</code>函数可谓四两拨千斤，通过结构体中一个变量找到这个结构体的首地址，从而拿到之前申请的驱动上下文结构体，在之前probe里申请了count个key_irq_dev结构体，每个驱动节点对应一个key_irq_dev结构体的上下文。<code>container_of()</code>可以区分是哪个节点上下文吗？</p>
+<p><strong>可以</strong></p>
+<p><code>key_irq_dev *key_ctx = kmalloc(sizeof(key_irq_dev) * 4, GFP_KERNEL);</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">字符设备1</th>
+<th style="text-align:left">字符设备2</th>
+<th style="text-align:left">字符设备3</th>
+<th style="text-align:left">字符设备4</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">cdev,devid……</td>
+<td style="text-align:left">cdev,devid……</td>
+<td style="text-align:left">cdev,devid…..</td>
+<td style="text-align:left">cdev,devid……</td>
+</tr>
+</tbody>
+</table>
+<p>假如申请了4个字符设备上下文，每个里面都有cdev成员，都会在<code>cdev_add()</code>时候添加到<code>struct file</code>里，在open时候取出来把单个字符设备首地址再放到<code>file-&gt;private_data</code>里，从而<code>close、write、read、ioctrl</code>都可以直接拿到。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">key_close</span> <span class="params">(struct inode *node, struct file *file)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	dev_ctx *key_ctx = (dev_ctx *)file-&gt;private_data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> ssize_t <span class="title">key_read</span> <span class="params">(struct file *file, <span class="keyword">char</span> __user *buf, <span class="keyword">size_t</span> size, <span class="keyword">loff_t</span> *offset)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	dev_ctx *key_ctx = (dev_ctx *)file-&gt;private_data;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">static</span> ssize_t <span class="title">key_write</span> <span class="params">(struct file *file, <span class="keyword">const</span> <span class="keyword">char</span> __user *buf, <span class="keyword">size_t</span> size, <span class="keyword">loff_t</span> *offset)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	dev_ctx *key_ctx = (dev_ctx *)file-&gt;private_data;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -380,7 +356,7 @@
     
     <li class="post-copyright-link hidden-xs">
       <strong>本文链接：</strong>
-      <a href="http://www.19940717.xyz/2019/01/09/在树莓派上安装gogs-git服务器/" title="在树莓派上安装gogs git服务器" target="_blank" rel="external">http://www.19940717.xyz/2019/01/09/在树莓派上安装gogs-git服务器/</a>
+      <a href="http://www.19940717.xyz/2020/05/18/linux-字符驱动中私有数据用法/" title="linux 字符驱动中私有数据用法" target="_blank" rel="external">http://www.19940717.xyz/2020/05/18/linux-字符驱动中私有数据用法/</a>
     </li>
     
     <li class="post-copyright-license">
@@ -424,13 +400,9 @@
   
   <ul class="pager pull-left">
     
-    <li class="prev">
-      <a href="/2019/01/10/在树莓派上编译驱动/" title="在树莓派上编译驱动"><i class="icon icon-angle-left" aria-hidden="true"></i><span>&nbsp;&nbsp;Newer</span></a>
-    </li>
-    
     
     <li class="next">
-      <a href="/2019/01/09/树莓派安装NAS系统/" title="树莓派安装NAS系统"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+      <a href="/2020/03/14/MCU裸机实现debug-shell/" title="MCU裸机实现debug shell"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
     </li>
     
     
