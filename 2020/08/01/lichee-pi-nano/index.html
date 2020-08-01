@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="format-detection" content="telephone=no,email=no,adress=no">
+  <!-- Color theme for statusbar -->
+  <meta name="theme-color" content="#000000">
+  <!-- 强制页面在当前窗口以独立页面显示,防止别人在框架里调用页面 -->
+  <meta http-equiv="window-target" content="_top">
+  
+  
+  <title>lichee_pi_nano | Hexo</title>
+  <meta name="description" content="荔枝派nano SPI Flash启动Linux  CPU:全志 F1C100s Flash型号：xt25f128b Flash容量：16M 烧写Flash工具：sunxi-tools ToolChain：gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi U-boot：2018.01 Linux内核：4.15 编译环境：Ubuntu 16.04">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lichee_pi_nano">
+<meta property="og:url" content="http://www.19940717.xyz/2020/08/01/lichee-pi-nano/index.html">
+<meta property="og:site_name" content="an99h&#39;s space">
+<meta property="og:description" content="荔枝派nano SPI Flash启动Linux  CPU:全志 F1C100s Flash型号：xt25f128b Flash容量：16M 烧写Flash工具：sunxi-tools ToolChain：gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi U-boot：2018.01 Linux内核：4.15 编译环境：Ubuntu 16.04">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-08-01T09:09:18.922Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="lichee_pi_nano">
+<meta name="twitter:description" content="荔枝派nano SPI Flash启动Linux  CPU:全志 F1C100s Flash型号：xt25f128b Flash容量：16M 烧写Flash工具：sunxi-tools ToolChain：gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi U-boot：2018.01 Linux内核：4.15 编译环境：Ubuntu 16.04">
+  <!-- Canonical links -->
+  <link rel="canonical" href="http://www.19940717.xyz/2020/08/01/lichee-pi-nano/index.html">
+  
+  
+    <link rel="icon" href="/favicon.png" type="image/x-icon">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+  
+  
+  
+</head>
+
+
+<body class="main-center" itemscope itemtype="http://schema.org/WebPage">
+  <header class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+  <div class="slimContent">
+    <div class="navbar-header">
+      
+      
+      <div class="profile-block text-center">
+        <a id="avatar" href="https://github.com/an99h" target="_blank">
+          <img class="img-circle img-rotate" src="/images/avatar.jpg" width="200" height="200">
+        </a>
+        <h2 id="name" class="hidden-xs hidden-sm">an99h</h2>
+        <h3 id="title" class="hidden-xs hidden-sm hidden-md">Programmer</h3>
+        <small id="location" class="text-muted hidden-xs hidden-sm"><i class="icon icon-map-marker"></i> Shanghai, China</small>
+      </div>
+      
+      <div class="search" id="search-form-wrap">
+
+    <form class="search-form sidebar-form">
+        <div class="input-group">
+            <input type="text" class="search-form-input form-control" placeholder="Search">
+            <span class="input-group-btn">
+                <button type="submit" class="search-form-submit btn btn-flat" onclick="return false;"><i class="icon icon-search"></i></button>
+            </span>
+        </div>
+    </form>
+    <div class="ins-search">
+  <div class="ins-search-mask"></div>
+  <div class="ins-search-container">
+    <div class="ins-input-wrapper">
+      <input type="text" class="ins-search-input" placeholder="Type something..." x-webkit-speech="">
+      <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="ins-section-wrapper">
+      <div class="ins-section-container"></div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+      <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <nav id="main-navbar" class="collapse navbar-collapse" itemscope="" itemtype="http://schema.org/SiteNavigationElement" role="navigation">
+      <ul class="nav navbar-nav main-nav ">
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/.">
+            
+            <i class="icon icon-home-fill"></i>
+            
+            <span class="menu-title">Home</span>
+          </a>
+        </li>
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives">
+            
+            <i class="icon icon-archives-fill"></i>
+            
+            <span class="menu-title">Archives</span>
+          </a>
+        </li>
+        
+      </ul>
+      
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/an99h" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    </nav>
+  </div>
+</header>
+
+  
+    <aside class="sidebar" itemscope="" itemtype="http://schema.org/WPSideBar">
+  <div class="slimContent">
+    
+      <div class="widget">
+    <h3 class="widget-title">Board</h3>
+    <div class="widget-body">
+        <div id="board">
+            <div class="content">
+                <p>欢迎交流与分享经验!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget-body">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Hello-World/">Hello World</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/总结/">总结</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/教程-总结/">教程&总结</a><span class="category-list-count">4</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget-body">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Domoticz/">Domoticz</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ESP8266/">ESP8266</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GCDWebServers/">GCDWebServers</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub-Pages/">GitHub Pages</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gogs/">Gogs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HomeBridge/">HomeBridge</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HomeKit/">HomeKit</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux驱动/">Linux驱动</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MCU/">MCU</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MarkDown/">MarkDown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MiWiFi/">MiWiFi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NAS/">NAS</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NodeMCU/">NodeMCU</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RTOS/">RTOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Raspberry-Pi/">Raspberry Pi</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Shell/">Shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ZYNQ/">ZYNQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/aria2/">aria2</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/char-driver/">char driver</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/chrome/">chrome</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/driver/">driver</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitHub-Desktop/">gitHub Desktop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gogs/">gogs</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/homebrew/">homebrew</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iTunes/">iTunes</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/opkg/">opkg</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scp/">scp</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sourceTree/">sourceTree</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ssh/">ssh</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/刷机/">刷机</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/域名/">域名</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/猫盘/">猫盘</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/路由器/">路由器</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget-body tagcloud">
+      <a href="/tags/Domoticz/" style="font-size: 13px;">Domoticz</a> <a href="/tags/ESP8266/" style="font-size: 13.5px;">ESP8266</a> <a href="/tags/GCDWebServers/" style="font-size: 13px;">GCDWebServers</a> <a href="/tags/GitHub-Pages/" style="font-size: 13px;">GitHub Pages</a> <a href="/tags/Gogs/" style="font-size: 13px;">Gogs</a> <a href="/tags/Hexo/" style="font-size: 13.5px;">Hexo</a> <a href="/tags/HomeBridge/" style="font-size: 13px;">HomeBridge</a> <a href="/tags/HomeKit/" style="font-size: 13.5px;">HomeKit</a> <a href="/tags/Linux驱动/" style="font-size: 13px;">Linux驱动</a> <a href="/tags/MCU/" style="font-size: 13px;">MCU</a> <a href="/tags/MarkDown/" style="font-size: 13px;">MarkDown</a> <a href="/tags/MiWiFi/" style="font-size: 13px;">MiWiFi</a> <a href="/tags/NAS/" style="font-size: 13.5px;">NAS</a> <a href="/tags/NodeMCU/" style="font-size: 13.5px;">NodeMCU</a> <a href="/tags/RTOS/" style="font-size: 13px;">RTOS</a> <a href="/tags/Raspberry-Pi/" style="font-size: 14px;">Raspberry Pi</a> <a href="/tags/Shell/" style="font-size: 13px;">Shell</a> <a href="/tags/ZYNQ/" style="font-size: 13px;">ZYNQ</a> <a href="/tags/aria2/" style="font-size: 13.5px;">aria2</a> <a href="/tags/char-driver/" style="font-size: 13px;">char driver</a> <a href="/tags/chrome/" style="font-size: 13.5px;">chrome</a> <a href="/tags/driver/" style="font-size: 13px;">driver</a> <a href="/tags/git/" style="font-size: 14px;">git</a> <a href="/tags/gitHub-Desktop/" style="font-size: 13px;">gitHub Desktop</a> <a href="/tags/gogs/" style="font-size: 13px;">gogs</a> <a href="/tags/homebrew/" style="font-size: 13px;">homebrew</a> <a href="/tags/iOS/" style="font-size: 13px;">iOS</a> <a href="/tags/iTunes/" style="font-size: 13px;">iTunes</a> <a href="/tags/opkg/" style="font-size: 13px;">opkg</a> <a href="/tags/scp/" style="font-size: 13px;">scp</a> <a href="/tags/sourceTree/" style="font-size: 13px;">sourceTree</a> <a href="/tags/ssh/" style="font-size: 13px;">ssh</a> <a href="/tags/刷机/" style="font-size: 13px;">刷机</a> <a href="/tags/域名/" style="font-size: 13px;">域名</a> <a href="/tags/猫盘/" style="font-size: 13px;">猫盘</a> <a href="/tags/路由器/" style="font-size: 13px;">路由器</a>
+    </div>
+  </div>
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Archive</h3>
+    <div class="widget-body">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/03/">March 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/06/">June 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">3</span></li></ul>
+    </div>
+  </div>
+
+
+    
+      
+  <div class="widget">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget-body">
+      <ul class="recent-post-list list-unstyled no-thumbnail">
+        
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/08/01/lichee-pi-nano/" class="title">lichee_pi_nano</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-08-01T03:48:03.000Z" itemprop="datePublished">2020-08-01</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/06/17/Thinysh/" class="title">Thinysh</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-06-17T13:31:13.000Z" itemprop="datePublished">2020-06-17</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/05/18/linux-字符驱动中私有数据用法/" class="title">linux 字符驱动中私有数据用法</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-05-18T15:22:49.000Z" itemprop="datePublished">2020-05-18</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/03/14/MCU裸机实现debug-shell/" class="title">MCU裸机实现debug shell</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-03-14T11:57:55.000Z" itemprop="datePublished">2020-03-14</time>
+              </p>
+            </div>
+          </li>
+          
+          <li>
+            
+            <div class="item-inner">
+              <p class="item-category">
+                
+              </p>
+              <p class="item-title">
+                <a href="/2020/01/19/猫盘群晖安装gogs/" class="title">猫盘群晖安装gogs</a>
+              </p>
+              <p class="item-date">
+                <time datetime="2020-01-19T12:53:57.000Z" itemprop="datePublished">2020-01-19</time>
+              </p>
+            </div>
+          </li>
+          
+      </ul>
+    </div>
+  </div>
+  
+
+    
+  </div>
+</aside>
+
+  
+  
+<main class="main" role="main">
+  <div class="content">
+  <article id="post-lichee-pi-nano" class="article article-type-post" itemscope="" itemtype="http://schema.org/BlogPosting">
+    
+    <div class="article-header">
+      
+        
+  
+    <h1 class="article-title" itemprop="name">
+      lichee_pi_nano
+    </h1>
+  
+
+      
+      <div class="article-meta">
+        <span class="article-date">
+    <i class="icon icon-calendar-check"></i>
+	<a href="/2020/08/01/lichee-pi-nano/" class="article-date">
+	  <time datetime="2020-08-01T03:48:03.000Z" itemprop="datePublished">2020-08-01</time>
+	</a>
+</span>
+        
+        
+
+        
+
+        <span class="post-comment"><i class="icon icon-comment"></i> <a href="/2020/08/01/lichee-pi-nano/#comments" class="article-comment-link">Comments</a></span>
+        
+      </div>
+    </div>
+    <div class="article-entry marked-body" itemprop="articleBody">
+      
+        <h2 id="荔枝派nano-SPI-Flash启动Linux"><a href="#荔枝派nano-SPI-Flash启动Linux" class="headerlink" title="荔枝派nano SPI Flash启动Linux"></a>荔枝派nano SPI Flash启动Linux</h2><blockquote>
+<ul>
+<li>CPU:全志 F1C100s</li>
+<li>Flash型号：xt25f128b</li>
+<li>Flash容量：16M</li>
+<li>烧写Flash工具：sunxi-tools</li>
+<li>ToolChain：gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi</li>
+<li>U-boot：2018.01</li>
+<li>Linux内核：4.15</li>
+<li>编译环境：Ubuntu 16.04</li>
+</ul>
+</blockquote>
+<h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h3><ul>
+<li>U-BOOT</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/Lichee-Pi/u-boot.git -b nano-v2018.01</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Linux</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git clone --depth=1 -b f1c100s-480272lcd-test https://github.com/Icenowy/linux.git</span><br><span class="line">cd linux</span><br><span class="line">wget http://nano.lichee.pro/_static/step_by_step/lichee_nano_linux.config</span><br><span class="line">mv lichee_nano_linux.config .config</span><br></pre></td></tr></table></figure>
+<ul>
+<li>ToolChain</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget http://releases.linaro.org/components/toolchain/binaries/7.2-2017.11/arm-linux-gnueabi/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi.tar.xz  </span><br><span class="line">tar -vxJf gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi.tar.xz</span><br><span class="line">export PATH=$PATH:/path/to/gcc-linaro-7.2.1-2017.11-x86_64_arm-linux-gnueabi/bin</span><br></pre></td></tr></table></figure>
+<ul>
+<li>sunxi-tools</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/Icenowy/sunxi-tools.git -b f1c100s-spiflash</span><br><span class="line">//安装sunxi-tools依赖库</span><br><span class="line">apt-get install libz libusb-1.0-0-dev</span><br><span class="line">make &amp;&amp; make install</span><br><span class="line">// 查看芯片</span><br><span class="line">sunxi-fel -l</span><br><span class="line">//加载并执行uboot的spl</span><br><span class="line">sunxi-fel spl 文件名</span><br><span class="line">// 单次运行</span><br><span class="line">sunxi-fel uboot u-boot-sunxi-with-spl.bin </span><br><span class="line">// 烧进 spi-flash （开机自启）</span><br><span class="line">sunxi-fel -p spiflash-write 0 u-boot-sunxi-with-spl.bin</span><br></pre></td></tr></table></figure>
+<ul>
+<li>进入spl模式两种方式<ol>
+<li>上电时拉低SPI flash 的 CS引脚</li>
+<li>u-boot下：sf probe 0;sf erase 0 0x100000;reset</li>
+</ol>
+</li>
+</ul>
+<h3 id="U-BOOT"><a href="#U-BOOT" class="headerlink" title="U-BOOT"></a>U-BOOT</h3><p>由于官方板子用的Flash型号是w25q128，我买的板子Flash型号是xt25f128b，经过查找资料得知这两块Flash指令几乎完全一样，但是ID不同u-boot不能识别xt25f128b，需要自己修改u-boot spi代码。</p>
+<ul>
+<li>u-boot/drivers/mtd/spi/spi_flash_ids.c</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  &#123;&quot;w25q128fw&quot;, INFO(0xef6018, 0x0, 64 * 1024, 256, RD_FULL | WR_QPP | SECT_4K) &#125;,</span><br><span class="line">+ &#123;&quot;xt25f128b&quot;, INFO(0x0b4018, 0x0, 64 * 1024, 256, RD_FULL | WR_QPP | SECT_4K) &#125;,</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编译u-boot</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">make ARCH=arm CROSS_COMPILE=arm-none-eabi- licheepi_nano_spiflash_defconfig</span><br><span class="line">make ARCH=arm CROSS_COMPILE=arm-none-eabi-</span><br></pre></td></tr></table></figure>
+<ul>
+<li>将u-boot烧入flash启动后<br><code>sf probe 0</code>即可看到flash挂载成功</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">=&gt; sf probe 0</span><br><span class="line">SF: Detected xt25f128b with page size 256 Bytes, erase size 4 KiB, total 16 MiB</span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改之前</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">=&gt; sf probe 0</span><br><span class="line">SF: unrecognized JEDEC id bytes: 0b, 40, 18</span><br></pre></td></tr></table></figure>
+<ul>
+<li>配置u-boot menuconfig</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[*] Enable boot arguments</span><br><span class="line">	console=tty0 console=ttyS0,115200 panic=5 rootwait root=/dev/mtdblock3 rw rootfstype=jffs2</span><br><span class="line">[*] Enable a default value for bootcmd</span><br><span class="line">	sf probe 0 50000000; sf read 0x80C00000 0x100000 0x4000; sf read 0x80008000 0x110000 0x400000; bootz 0x80008000 - 0x80C00000</span><br></pre></td></tr></table></figure>
+<ul>
+<li>生成SPI Falsh可以用的bin文件<br><code>u-boot-sunxi-with-spl.bin</code></li>
+</ul>
+<h3 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h3><ul>
+<li>修改make menuconfig 适配SPI Flash</li>
+</ul>
+<hr>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Device Drivers &gt; Memory Technology Device (MTD) support</span><br><span class="line">	&lt;*&gt;Command line partition table parsing</span><br><span class="line">	&lt;*&gt;Caching block device access to MTD devices</span><br><span class="line">	Self-contained MTD device drivers  ---&gt;</span><br><span class="line">		&lt;*&gt; Support most SPI Flash chips (AT26DF, M25P, W25X, ...)</span><br><span class="line">		&lt;*&gt; MTD using block device</span><br><span class="line">Device Drivers &gt; SPI support</span><br><span class="line">	&lt; &gt;   Allwinner A10 SoCs SPI controller   </span><br><span class="line"> 	&lt;*&gt;   Allwinner A31 SPI controller</span><br><span class="line"></span><br><span class="line">File systems &gt; Miscellaneous filesystems</span><br><span class="line">	&lt;*&gt;   Journalling Flash File System v2 (JFFS2) support</span><br></pre></td></tr></table></figure>
+<hr>
+<ul>
+<li>修改spi驱动适配xt25f128b Flash<br><code>linux/arch/arm/boot/dts/suniv-f1c100s-licheepi-nano.dts</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&amp;spi0 &#123;</span><br><span class="line">    pinctrl-names = &quot;default&quot;;</span><br><span class="line">    pinctrl-0 = &lt;&amp;spi0_pins_a&gt;;</span><br><span class="line">    status = &quot;okay&quot;;</span><br><span class="line">    spi-max-frequency = &lt;50000000&gt;;</span><br><span class="line">    flash@0 &#123;</span><br><span class="line">        #address-cells = &lt;1&gt;;</span><br><span class="line">        #size-cells = &lt;1&gt;;</span><br><span class="line">        compatible = &quot;winbond,xt25f128b&quot;, &quot;jedec,spi-nor&quot;;</span><br><span class="line">        reg = &lt;0&gt;;</span><br><span class="line">        spi-max-frequency = &lt;50000000&gt;;</span><br><span class="line">        partitions &#123;</span><br><span class="line">            compatible = &quot;fixed-partitions&quot;;</span><br><span class="line">            #address-cells = &lt;1&gt;;</span><br><span class="line">            #size-cells = &lt;1&gt;;</span><br><span class="line">            partition@0 &#123;</span><br><span class="line">                label = &quot;u-boot&quot;;</span><br><span class="line">                reg = &lt;0x000000 0x100000&gt;;</span><br><span class="line">                read-only;</span><br><span class="line">            &#125;;</span><br><span class="line">            partition@100000 &#123;</span><br><span class="line">                label = &quot;dtb&quot;;</span><br><span class="line">                reg = &lt;0x100000 0x10000&gt;;</span><br><span class="line">                read-only;</span><br><span class="line">            &#125;;</span><br><span class="line">            partition@110000 &#123;</span><br><span class="line">                label = &quot;kernel&quot;;</span><br><span class="line">                reg = &lt;0x110000 0x400000&gt;;</span><br><span class="line">                read-only;</span><br><span class="line">            &#125;;</span><br><span class="line">            partition@510000 &#123;</span><br><span class="line">                label = &quot;rootfs&quot;;</span><br><span class="line">                reg = &lt;0x510000 0xAF0000&gt;;</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><code>/linux/drivers/mtd/devies/m25p80.c</code>最后增加xt25f128b定义</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;w25q80bl&quot;&#125;, &#123;&quot;w25q128&quot;&#125;, &#123;&quot;w25q256&quot;&#125;, &#123;&quot;xt25f128b&quot;&#125;</span><br></pre></td></tr></table></figure>
+<p><code>/linux/drivers/mtd/spi-nor/flash_info spi_nor_ids[]</code>中修改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">/*&#123; &quot;w25q128&quot;, INFO(0xef4018, 0, 64 * 1024, 256, SECT_4K) &#125;,*/</span><br><span class="line">&#123; &quot;w25q128&quot;,   INFO(0xef4018, 0, 64 * 1024, 256, 0) &#125;,</span><br><span class="line">&#123; &quot;xt25f128b&quot;, INFO(0x0b4018, 0, 64 * 1024, 256, 0) &#125;,</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编译zImage dtb</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- zImage dtbs</span><br></pre></td></tr></table></figure>
+<h3 id="编译rootfs"><a href="#编译rootfs" class="headerlink" title="编译rootfs"></a>编译rootfs</h3><ul>
+<li>获取buildroot源码</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">wget https://buildroot.org/downloads/buildroot-2017.08.tar.gz</span><br><span class="line">tar xvf buildroot-2017.08.tar.gz</span><br><span class="line">cd buildroot-2017.08/</span><br><span class="line">make menuconfig</span><br><span class="line">-----------------------------------------------</span><br><span class="line">Target options  ---&gt;</span><br><span class="line">    Target Architecture (ARM (little endian))  ---&gt;</span><br><span class="line">    Target Architecture Variant (arm926t)  ---&gt;   // arm926ejs架构</span><br><span class="line">    Enable VFP extension support                  // Nano 没有 VFP单元，勾选会导致某些应用无法运行</span><br><span class="line">    Target ABI (EABI)  ---&gt;</span><br><span class="line">    Floating point strategy (Soft float)  ---&gt;    // 软浮点</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>下载依赖工具包<br>  <a href="https://pan.baidu.com/s/1murPEvc1GuchQ2d9QaEM2Q" target="_blank" rel="noopener">https://pan.baidu.com/s/1murPEvc1GuchQ2d9QaEM2Q</a> 提取码: 3rcq<br>  下载完之后，解压后复制到”buildroot-2017.08/dl/“下，没有dl文件夹可自行创建。<br>  也可以不下载此工具包，但是buildroot自动更具需求下载这些工具包也许很慢  </p>
+</li>
+<li><p>编译rootfs  </p>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+<ul>
+<li>编译完生成rootfs.tar在 output/image目录下</li>
+</ul>
+<h3 id="打包SPI-Flash-bin文件"><a href="#打包SPI-Flash-bin文件" class="headerlink" title="打包SPI Flash bin文件"></a>打包SPI Flash bin文件</h3><p>将生成的以下文件找到放到一个目录下</p>
+<ul>
+<li>suniv-f1c100s-licheepi-nano.dtb</li>
+<li>u-boot-sunxi-with-spl.bin</li>
+<li>zImage</li>
+<li>rootfs.tar</li>
+</ul>
+<p>1.先生成jffs2.img文件,不然每次打包会消耗很长时间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mkdir rootfs</span><br><span class="line">cd rootfs;cp ../rootfs.tar .</span><br><span class="line">tar -xvf rootfs.tar;rm rootfs.tar</span><br><span class="line">cd ..</span><br><span class="line"># 为根文件系统制作jffs2镜像包</span><br><span class="line"># --pad参数指定 jffs2大小</span><br><span class="line">//计算得到 0x1000000(16M)-0x10000(64K)-0x100000(1M)-0x400000(4M)=0xAF0000</span><br><span class="line">mkfs.jffs2 -s 0x100 -e 0x10000 --pad=0xAF0000 -d rootfs/ -o jffs2.img</span><br></pre></td></tr></table></figure>
+<p>2.打包脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/sh</span><br><span class="line">dd if=/dev/zero of=flashimg.bin bs=1m count=16</span><br><span class="line">dd if=u-boot-sunxi-with-spl.bin of=flashimg.bin bs=1k conv=notrunc</span><br><span class="line">dd if=suniv-f1c100s-licheepi-nano.dtb of=flashimg.bin bs=1k seek=1024  conv=notrunc</span><br><span class="line">dd if=zImage of=flashimg.bin bs=1k seek=1088  conv=notrunc</span><br><span class="line">dd if=jffs2.img of=flashimg.bin  bs=1k seek=5184  conv=notrunc</span><br></pre></td></tr></table></figure>
+<h3 id="烧写SPI-Flash"><a href="#烧写SPI-Flash" class="headerlink" title="烧写SPI Flash"></a>烧写SPI Flash</h3><ol>
+<li>先进入SPL模式</li>
+<li>sunxi-fel -p spiflash-write 0 flashimg.bin</li>
+</ol>
+<h3 id="上电启动"><a href="#上电启动" class="headerlink" title="上电启动"></a>上电启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br></pre></td><td class="code"><pre><span class="line">U-Boot SPL 2018.01-05679-g013ca457fd-dirty (Jul 29 2020 - 22:48:51)</span><br><span class="line">DRAM: 32 MiB</span><br><span class="line">Trying to boot from MMC1</span><br><span class="line">Card did not respond to voltage select!</span><br><span class="line">mmc_init: -95, time 22</span><br><span class="line">spl: mmc init failed with error: -95</span><br><span class="line">Trying to boot from sunxi SPI</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">U-Boot 2018.01-05679-g013ca457fd-dirty (Jul 29 2020 - 22:48:51 +0800) Allwinner Technology</span><br><span class="line"></span><br><span class="line">CPU:   Allwinner F Series (SUNIV)</span><br><span class="line">Model: Lichee Pi Nano</span><br><span class="line">DRAM:  32 MiB</span><br><span class="line">MMC:   SUNXI SD/MMC: 0</span><br><span class="line">SF: Detected xt25f128b with page size 256 Bytes, erase size 4 KiB, total 16 MiB</span><br><span class="line">*** Warning - bad CRC, using default environment</span><br><span class="line"></span><br><span class="line">In:    serial@1c25000</span><br><span class="line">Out:   serial@1c25000</span><br><span class="line">Err:   serial@1c25000</span><br><span class="line">Net:   No ethernet found.</span><br><span class="line">starting USB...</span><br><span class="line">No controllers found</span><br><span class="line">Hit any key to stop autoboot:  0 </span><br><span class="line">SF: Detected xt25f128b with page size 256 Bytes, erase size 4 KiB, total 16 MiB</span><br><span class="line">device 0 offset 0x100000, size 0x4000</span><br><span class="line">SF: 16384 bytes @ 0x100000 Read: OK</span><br><span class="line">device 0 offset 0x110000, size 0x400000</span><br><span class="line">SF: 4194304 bytes @ 0x110000 Read: OK</span><br><span class="line">## Flattened Device Tree blob at 80c00000</span><br><span class="line">   Booting using the fdt blob at 0x80c00000</span><br><span class="line">   Loading Device Tree to 816fb000, end 816ffdc1 ... OK</span><br><span class="line"></span><br><span class="line">Starting kernel ...</span><br><span class="line"></span><br><span class="line">[    0.000000] Booting Linux on physical CPU 0x0</span><br><span class="line">[    0.000000] Linux version 4.15.0-rc8-licheepi-nano (root@instance-uff3uo0w) (gcc version 7.2.1 20171011 (Linaro GCC 7.2-2017.11)) #12 Fri Jul 31 23:46:00 CST 2020</span><br><span class="line">[    0.000000] CPU: ARM926EJ-S [41069265] revision 5 (ARMv5TEJ), cr=0005317f</span><br><span class="line">[    0.000000] CPU: VIVT data cache, VIVT instruction cache</span><br><span class="line">[    0.000000] OF: fdt: Machine model: Lichee Pi Nano</span><br><span class="line">[    0.000000] Memory policy: Data cache writeback</span><br><span class="line">[    0.000000] random: fast init done</span><br><span class="line">[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 8128</span><br><span class="line">[    0.000000] Kernel command line: console=tty0 console=ttyS0,115200 panic=5 rootwait root=/dev/mtdblock3 rw rootfstype=jffs2</span><br><span class="line">[    0.000000] Dentry cache hash table entries: 4096 (order: 2, 16384 bytes)</span><br><span class="line">[    0.000000] Inode-cache hash table entries: 2048 (order: 1, 8192 bytes)</span><br><span class="line">[    0.000000] Memory: 22680K/32768K available (6144K kernel code, 237K rwdata, 1412K rodata, 1024K init, 246K bss, 10088K reserved, 0K cma-reserved, 0K highmem)</span><br><span class="line">[    0.000000] Virtual kernel memory layout:</span><br><span class="line">[    0.000000]     vector  : 0xffff0000 - 0xffff1000   (   4 kB)</span><br><span class="line">[    0.000000]     fixmap  : 0xffc00000 - 0xfff00000   (3072 kB)</span><br><span class="line">[    0.000000]     vmalloc : 0xc2800000 - 0xff800000   ( 976 MB)</span><br><span class="line">[    0.000000]     lowmem  : 0xc0000000 - 0xc2000000   (  32 MB)</span><br><span class="line">[    0.000000]     pkmap   : 0xbfe00000 - 0xc0000000   (   2 MB)</span><br><span class="line">[    0.000000]     modules : 0xbf000000 - 0xbfe00000   (  14 MB)</span><br><span class="line">[    0.000000]       .text : 0x(ptrval) - 0x(ptrval)   (7136 kB)</span><br><span class="line">[    0.000000]       .init : 0x(ptrval) - 0x(ptrval)   (1024 kB)</span><br><span class="line">[    0.000000]       .data : 0x(ptrval) - 0x(ptrval)   ( 238 kB)</span><br><span class="line">[    0.000000]        .bss : 0x(ptrval) - 0x(ptrval)   ( 247 kB)</span><br><span class="line">[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=1, Nodes=1</span><br><span class="line">[    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16</span><br><span class="line">[    0.000045] sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns</span><br><span class="line">[    0.000110] clocksource: timer: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 79635851949 ns</span><br><span class="line">[    0.000620] Console: colour dummy device 80x30</span><br><span class="line">[    0.001550] console [tty0] enabled</span><br><span class="line">[    0.001650] Calibrating delay loop... 203.16 BogoMIPS (lpj=1015808)</span><br><span class="line">[    0.070278] pid_max: default: 32768 minimum: 301</span><br><span class="line">[    0.070615] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes)</span><br><span class="line">[    0.070709] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes)</span><br><span class="line">[    0.072162] CPU: Testing write buffer coherency: ok</span><br><span class="line">[    0.073826] Setting up static identity map for 0x80100000 - 0x80100058</span><br><span class="line">[    0.076384] devtmpfs: initialized</span><br><span class="line">[    0.082816] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 19112604462750000 ns</span><br><span class="line">[    0.082979] futex hash table entries: 256 (order: -1, 3072 bytes)</span><br><span class="line">[    0.083283] pinctrl core: initialized pinctrl subsystem</span><br><span class="line">[    0.085288] NET: Registered protocol family 16</span><br><span class="line">[    0.086792] DMA: preallocated 256 KiB pool for atomic coherent allocations</span><br><span class="line">[    0.088630] cpuidle: using governor menu</span><br><span class="line">[    0.112913] SCSI subsystem initialized</span><br><span class="line">[    0.113313] usbcore: registered new interface driver usbfs</span><br><span class="line">[    0.113521] usbcore: registered new interface driver hub</span><br><span class="line">[    0.113779] usbcore: registered new device driver usb</span><br><span class="line">[    0.114262] pps_core: LinuxPPS API ver. 1 registered</span><br><span class="line">[    0.114342] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti &lt;giometti@linux.it&gt;</span><br><span class="line">[    0.114467] PTP clock support registered</span><br><span class="line">[    0.114967] Advanced Linux Sound Architecture Driver Initialized.</span><br><span class="line">[    0.116596] clocksource: Switched to clocksource timer</span><br><span class="line">[    0.142167] NET: Registered protocol family 2</span><br><span class="line">[    0.143635] TCP established hash table entries: 1024 (order: 0, 4096 bytes)</span><br><span class="line">[    0.143787] TCP bind hash table entries: 1024 (order: 0, 4096 bytes)</span><br><span class="line">[    0.143875] TCP: Hash tables configured (established 1024 bind 1024)</span><br><span class="line">[    0.144181] UDP hash table entries: 256 (order: 0, 4096 bytes)</span><br><span class="line">[    0.144290] UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)</span><br><span class="line">[    0.144809] NET: Registered protocol family 1</span><br><span class="line">[    0.146034] RPC: Registered named UNIX socket transport module.</span><br><span class="line">[    0.146144] RPC: Registered udp transport module.</span><br><span class="line">[    0.146195] RPC: Registered tcp transport module.</span><br><span class="line">[    0.146240] RPC: Registered tcp NFSv4.1 backchannel transport module.</span><br><span class="line">[    0.148640] NetWinder Floating Point Emulator V0.97 (double precision)</span><br><span class="line">[    0.150482] Initialise system trusted keyrings</span><br><span class="line">[    0.151073] workingset: timestamp_bits=30 max_order=13 bucket_order=0</span><br><span class="line">[    0.168235] NFS: Registering the id_resolver key type</span><br><span class="line">[    0.168411] Key type id_resolver registered</span><br><span class="line">[    0.168469] Key type id_legacy registered</span><br><span class="line">[    0.168617] jffs2: version 2.2. (NAND) © 2001-2006 Red Hat, Inc.</span><br><span class="line">[    0.182944] Key type asymmetric registered</span><br><span class="line">[    0.183054] Asymmetric key parser &apos;x509&apos; registered</span><br><span class="line">[    0.183294] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 251)</span><br><span class="line">[    0.183393] io scheduler noop registered</span><br><span class="line">[    0.183442] io scheduler deadline registered</span><br><span class="line">[    0.184254] io scheduler cfq registered (default)</span><br><span class="line">[    0.184352] io scheduler mq-deadline registered</span><br><span class="line">[    0.184402] io scheduler kyber registered</span><br><span class="line">[    0.185450] sun4i-usb-phy 1c13400.phy: Couldn&apos;t request ID GPIO</span><br><span class="line">[    0.195286] suniv-pinctrl 1c20800.pinctrl: initialized sunXi PIO driver</span><br><span class="line">[    0.359693] Serial: 8250/16550 driver, 8 ports, IRQ sharing disabled</span><br><span class="line">[    0.366254] console [ttyS0] disabled</span><br><span class="line">[    0.386571] 1c25000.serial: ttyS0 at MMIO 0x1c25000 (irq = 22, base_baud = 6250000) is a 16550A</span><br><span class="line">[    0.865610] console [ttyS0] enabled</span><br><span class="line">[    0.874710] SCSI Media Changer driver v0.25 </span><br><span class="line">[    0.882595] m25p80 spi0.0: w25q128 (16384 Kbytes)</span><br><span class="line">[    0.887559] 4 ofpart partitions found on MTD device spi0.0</span><br><span class="line">[    0.893098] Creating 4 MTD partitions on &quot;spi0.0&quot;:</span><br><span class="line">[    0.898012] 0x000000000000-0x000000100000 : &quot;u-boot&quot;</span><br><span class="line">[    0.905637] 0x000000100000-0x000000110000 : &quot;dtb&quot;</span><br><span class="line">[    0.912939] 0x000000110000-0x000000510000 : &quot;kernel&quot;</span><br><span class="line">[    0.920501] 0x000000510000-0x000001000000 : &quot;rootfs&quot;</span><br><span class="line">[    0.928554] ehci_hcd: USB 2.0 &apos;Enhanced&apos; Host Controller (EHCI) Driver</span><br><span class="line">[    0.935170] ehci-platform: EHCI generic platform driver</span><br><span class="line">[    0.940828] ohci_hcd: USB 1.1 &apos;Open&apos; Host Controller (OHCI) Driver</span><br><span class="line">[    0.947206] ohci-platform: OHCI generic platform driver</span><br><span class="line">[    0.952862] usbcore: registered new interface driver usb-storage</span><br><span class="line">[    0.959931] udc-core: couldn&apos;t find an available UDC - added [g_cdc] to list of pending drivers</span><br><span class="line">[    0.969059] i2c /dev entries driver</span><br><span class="line">[    1.026724] sunxi-mmc 1c0f000.mmc: base:0x33118130 irq:18</span><br><span class="line">[    1.034185] usbcore: registered new interface driver usbhid</span><br><span class="line">[    1.039950] usbhid: USB HID core driver</span><br><span class="line">[    1.061472] NET: Registered protocol family 17</span><br><span class="line">[    1.066233] Key type dns_resolver registered</span><br><span class="line">[    1.072917] Loading compiled-in X.509 certificates</span><br><span class="line">[    1.086747] usb_phy_generic usb_phy_generic.0.auto: usb_phy_generic.0.auto supply vcc not found, using dummy regulator</span><br><span class="line">[    1.098592] musb-hdrc musb-hdrc.1.auto: MUSB HDRC host driver</span><br><span class="line">[    1.104454] musb-hdrc musb-hdrc.1.auto: new USB bus registered, assigned bus number 1</span><br><span class="line">[    1.114743] hub 1-0:1.0: USB hub found</span><br><span class="line">[    1.118886] hub 1-0:1.0: 1 port detected</span><br><span class="line">[    1.124646] using random self ethernet address</span><br><span class="line">[    1.129301] using random host ethernet address</span><br><span class="line">[    1.136709] usb0: HOST MAC 8a:e5:b5:b0:45:f8</span><br><span class="line">[    1.141179] usb0: MAC f6:62:07:af:32:9b</span><br><span class="line">[    1.145153] g_cdc gadget: CDC Composite Gadget, version: King Kamehameha Day 2008</span><br><span class="line">[    1.152778] g_cdc gadget: g_cdc ready</span><br><span class="line">[    1.157412] cfg80211: Loading compiled-in X.509 certificates for regulatory database</span><br><span class="line">[    1.174818] cfg80211: Loaded X.509 cert &apos;sforshee: 00b28ddf47aef9cea7&apos;</span><br><span class="line">[    1.181749] vcc3v3: disabling</span><br><span class="line">[    1.184781] ALSA device list:</span><br><span class="line">[    1.187862]   #0: Loopback 1</span><br><span class="line">[    1.191623] platform regulatory.0: Direct firmware load for regulatory.db failed with error -2</span><br><span class="line">[    1.200410] cfg80211: failed to load regulatory.db</span><br><span class="line">[    1.300631] random: crng init done</span><br><span class="line">[    1.600135] VFS: Mounted root (jffs2 filesystem) on device 31:3.</span><br><span class="line">[    1.608202] devtmpfs: mounted</span><br><span class="line">[    1.615691] Freeing unused kernel memory: 1024K</span><br><span class="line">Starting logging: OK</span><br><span class="line">Initializing random number generator... done.</span><br><span class="line">Starting network: OK</span><br><span class="line"></span><br><span class="line">Welcome to Buildroot</span><br><span class="line">buildroot login: root</span><br><span class="line"># uname -a</span><br><span class="line">Linux buildroot 4.15.0-rc8-licheepi-nano #12 Fri Jul 31 23:46:00 CST 2020 armv5tejl GNU/Linux</span><br><span class="line">#</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-footer">
+      <blockquote class="mt-2x">
+  <ul class="post-copyright list-unstyled">
+    
+    <li class="post-copyright-link hidden-xs">
+      <strong>本文链接：</strong>
+      <a href="http://www.19940717.xyz/2020/08/01/lichee-pi-nano/" title="lichee_pi_nano" target="_blank" rel="external">http://www.19940717.xyz/2020/08/01/lichee-pi-nano/</a>
+    </li>
+    
+    <li class="post-copyright-license">
+      <strong>版权声明： </strong> 本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by/4.0/deed.zh" target="_blank" rel="external">CC BY 4.0 CN协议</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+</blockquote>
+
+
+<div class="panel panel-default panel-badger">
+  <div class="panel-body">
+    <figure class="media">
+      <div class="media-left">
+        <a href="https://github.com/an99h" target="_blank" class="img-burn thumb-sm visible-lg">
+          <img src="/images/avatar.jpg" class="img-rounded w-full" alt="">
+        </a>
+      </div>
+      <div class="media-body">
+        <h3 class="media-heading"><a href="https://github.com/an99h" target="_blank"><span class="text-dark">an99h</span><small class="ml-1x">Programmer</small></a></h3>
+        <div>null</div>
+      </div>
+    </figure>
+  </div>
+</div>
+
+
+    </div>
+  </article>
+  
+    
+  <section id="comments">
+  	
+  </section>
+
+
+  
+</div>
+
+  <nav class="bar bar-footer clearfix" data-stick-bottom="">
+  <div class="bar-inner">
+  
+  <ul class="pager pull-left">
+    
+    
+    <li class="next">
+      <a href="/2020/06/17/Thinysh/" title="Thinysh"><span>Older&nbsp;&nbsp;</span><i class="icon icon-angle-right" aria-hidden="true"></i></a>
+    </li>
+    
+    
+  </ul>
+  
+  
+  
+  <div class="bar-right">
+    
+  </div>
+  </div>
+</nav>
+  
+
+
+</main>
+
+  <footer class="footer" itemscope="" itemtype="http://schema.org/WPFooter">
+	
+	
+    <ul class="social-links">
+    	
+        <li><a href="https://github.com/an99h" target="_blank" title="Github" data-toggle="tooltip" data-placement="top"><i class="icon icon-github"></i></a></li>
+        
+        <li><a href="/" target="_blank" title="Weibo" data-toggle="tooltip" data-placement="top"><i class="icon icon-weibo"></i></a></li>
+        
+        <li><a href="/" target="_blank" title="Twitter" data-toggle="tooltip" data-placement="top"><i class="icon icon-twitter"></i></a></li>
+        
+        <li><a href="/" target="_blank" title="Behance" data-toggle="tooltip" data-placement="top"><i class="icon icon-behance"></i></a></li>
+        
+        <li><a href="/atom.xml" target="_blank" title="Rss" data-toggle="tooltip" data-placement="top"><i class="icon icon-rss"></i></a></li>
+        
+    </ul>
+
+    <div class="copyright">
+    	
+        <div class="publishby">
+        	Theme by <a href="https://github.com/cofess" target="_blank"> cofess </a>base on <a href="https://github.com/cofess/hexo-theme-pure" target="_blank">pure</a>.
+        </div>
+    </div>
+</footer>
+  <script src="//cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script>
+window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')
+</script>
+<script src="/js/plugin.min.js"></script>
+<script src="/js/application.js"></script>
+
+    <script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+
+
+
+
+   
+
+
+
+
+   
+
+
+
+
+
+
+</body>
+</html>
